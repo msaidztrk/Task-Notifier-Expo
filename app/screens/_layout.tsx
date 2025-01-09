@@ -20,7 +20,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          //   title: 'Home',
+            title: 'Alarms',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
           ),
@@ -29,30 +29,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name="about"
         options={{
-          //   title: 'About',
+            title: 'Create',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24} />
           ),
         }}
       />
-      <Tabs.Screen
-        name="logOfUsage"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'list' : 'list-outline'} color={color} size={24} />
-          ),
-        }}
-      />
 
-      <Tabs.Screen
-        name="userAddOrUpdate"
-        options={{
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'list' : 'list-outline'} color={color} size={24} />
-          ),
-        }}
-      />
+
+      
 
     </Tabs>
   );
