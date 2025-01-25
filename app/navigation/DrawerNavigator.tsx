@@ -3,7 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 // import Home from '../(tabs)/index'; // Adjust the import path as needed
 // import About from '../(tabs)/about'; // Adjust the import path as needed
 // import LogOfUsage from '../(tabs)/logOfUsage'; // Adjust the import path as needed
-import Sidebar from '../components/Sidebar'; // Adjust the import path as needed
+import Sidebar from '../layouts/Sidebar'; // Adjust the import path as needed
 
 const Drawer = createDrawerNavigator();
 

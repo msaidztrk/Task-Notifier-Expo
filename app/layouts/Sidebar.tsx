@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 
 import { Link } from 'expo-router';
-import { Routes } from '../types/routes';
+import { Routes } from '../navigation/routes';
 
 const Sidebar = ({ navigation }: DrawerContentComponentProps) => {
     

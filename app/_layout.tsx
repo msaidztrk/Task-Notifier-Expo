@@ -3,11 +3,9 @@ import { router, Slot, Stack, useFocusEffect, usePathname } from "expo-router";
 
 import "../global.css";
 import { Drawer } from "expo-router/drawer";
-import Sidebar from "./components/Sidebar";
-
+import Sidebar from "./layouts/Sidebar";
 import Toast from "react-native-toast-message";
-
-import CustomHeader from "./components/CustomHeader ";
+import CustomHeader from "./layouts/CustomHeader ";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useSettingsStorage from "./hooks/useSettingsStorage";
 
@@ -41,7 +39,7 @@ export default function RootLayout() {
       if (userSettingsData) {
         router.replace("/screens");
       } else {
-        router.replace("/letsGetStart");
+        router.replace("/screens/LoginScreen");
       }
     };
 

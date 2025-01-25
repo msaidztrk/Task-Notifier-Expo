@@ -2,19 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Dimensions,
-  StyleSheet,
-  Alert,
   Animated,
-  Easing,
   TouchableOpacity,
   Text,
   ScrollView,
+  Alert,
+  Easing,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons'; // For icons
-import  useSettingsStorage   from './hooks/useSettingsStorage';
+import { router } from 'expo-router'; // For navigation
+import useSettingsStorage from '../hooks/useSettingsStorage';
+import { Routes } from '../navigation/routes';
 
 const { width } = Dimensions.get('window');
 
@@ -26,7 +27,7 @@ const Login = () => {
   const [timePeriod, setTimePeriod] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
 
-  const { getSettingsData, saveSettingsData, clearSettingsData } = useSettingsStorage();
+  const { saveSettingsData } = useSettingsStorage();
 
   const handleNext = () => {
     if (step < 3) {
@@ -48,9 +49,9 @@ const Login = () => {
         selectedOption,
       };
 
-      saveSettingsData(data);
-
+      await saveSettingsData(data); // Save data to AsyncStorage
       Alert.alert('Success', 'Data saved successfully!');
+      router.replace(Routes.HOME);
     } catch (error) {
       Alert.alert('Error', 'Failed to save data.');
     }
@@ -68,19 +69,19 @@ const Login = () => {
   }, [step]); // Trigger animation only when step changes
 
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.card}>
+    <Animated.View className="flex-1 bg-gray-50 p-5" style={{ opacity: fadeAnim }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+        <View className="bg-white rounded-lg shadow-sm p-6">
           {step === 1 && (
             <View>
-              <Text style={styles.label}>Select Language:</Text>
+              <Text className="text-lg font-semibold text-gray-800 mb-4">Select Language:</Text>
               <Picker
                 selectedValue={language}
                 onValueChange={(itemValue) => {
                   setLanguage(itemValue);
                   handleNext();
                 }}
-                style={styles.picker}
+                className="mb-6"
               >
                 <Picker.Item label="English" value="en" />
                 <Picker.Item label="Spanish" value="es" />
@@ -91,7 +92,7 @@ const Login = () => {
 
           {step === 2 && (
             <View>
-              <Text style={styles.label}>Select Hour Type:</Text>
+              <Text className="text-lg font-semibold text-gray-800 mb-4">Select Hour Type:</Text>
               <RadioButton.Group
                 onValueChange={(value) => setTimePeriod(value)}
                 value={timePeriod}
@@ -99,27 +100,33 @@ const Login = () => {
                 <RadioButton.Item
                   label="12 Hours"
                   value="12"
-                  labelStyle={styles.radioLabel}
-                  style={styles.radioItem}
+                  labelStyle={{ fontSize: 16, color: '#333' }}
+                  style={{ marginVertical: 8, backgroundColor: '#f9f9f9', borderRadius: 8 }}
                   color="#007bff"
                   uncheckedColor="#999"
                 />
                 <RadioButton.Item
                   label="24 Hours"
                   value="24"
-                  labelStyle={styles.radioLabel}
-                  style={styles.radioItem}
+                  labelStyle={{ fontSize: 16, color: '#333' }}
+                  style={{ marginVertical: 8, backgroundColor: '#f9f9f9', borderRadius: 8 }}
                   color="#007bff"
                   uncheckedColor="#999"
                 />
               </RadioButton.Group>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={handlePrevious}>
+              <View className="flex-row justify-between mt-6">
+                <TouchableOpacity
+                  className="flex-row items-center bg-blue-500 px-4 py-2 rounded-lg"
+                  onPress={handlePrevious}
+                >
                   <MaterialIcons name="arrow-back" size={20} color="#fff" />
-                  <Text style={styles.buttonText}>Previous</Text>
+                  <Text className="text-white text-lg ml-2">Previous</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={handleNext}>
-                  <Text style={styles.buttonText}>Next</Text>
+                <TouchableOpacity
+                  className="flex-row items-center bg-blue-500 px-4 py-2 rounded-lg"
+                  onPress={handleNext}
+                >
+                  <Text className="text-white text-lg mr-2">Next</Text>
                   <MaterialIcons name="arrow-forward" size={20} color="#fff" />
                 </TouchableOpacity>
               </View>
@@ -128,7 +135,7 @@ const Login = () => {
 
           {step === 3 && (
             <View>
-              <Text style={styles.label}>Select an option:</Text>
+              <Text className="text-lg font-semibold text-gray-800 mb-4">Select an option:</Text>
               <RadioButton.Group
                 onValueChange={(value) => setSelectedOption(value)}
                 value={selectedOption}
@@ -136,27 +143,33 @@ const Login = () => {
                 <RadioButton.Item
                   label="Option 1"
                   value="Option 1"
-                  labelStyle={styles.radioLabel}
-                  style={styles.radioItem}
+                  labelStyle={{ fontSize: 16, color: '#333' }}
+                  style={{ marginVertical: 8, backgroundColor: '#f9f9f9', borderRadius: 8 }}
                   color="#007bff"
                   uncheckedColor="#999"
                 />
                 <RadioButton.Item
                   label="Option 2"
                   value="Option 2"
-                  labelStyle={styles.radioLabel}
-                  style={styles.radioItem}
+                  labelStyle={{ fontSize: 16, color: '#333' }}
+                  style={{ marginVertical: 8, backgroundColor: '#f9f9f9', borderRadius: 8 }}
                   color="#007bff"
                   uncheckedColor="#999"
                 />
               </RadioButton.Group>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={handlePrevious}>
+              <View className="flex-row justify-between mt-6">
+                <TouchableOpacity
+                  className="flex-row items-center bg-blue-500 px-4 py-2 rounded-lg"
+                  onPress={handlePrevious}
+                >
                   <MaterialIcons name="arrow-back" size={20} color="#fff" />
-                  <Text style={styles.buttonText}>Previous</Text>
+                  <Text className="text-white text-lg ml-2">Previous</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={handleSave}>
-                  <Text style={styles.buttonText}>Save</Text>
+                <TouchableOpacity
+                  className="flex-row items-center bg-blue-500 px-4 py-2 rounded-lg"
+                  onPress={handleSave}
+                >
+                  <Text className="text-white text-lg mr-2">Save</Text>
                   <MaterialIcons name="save" size={20} color="#fff" />
                 </TouchableOpacity>
               </View>
@@ -167,67 +180,5 @@ const Login = () => {
     </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-    padding: 20,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#333',
-  },
-  picker: {
-    marginBottom: 20,
-  },
-  radioItem: {
-    marginVertical: 5,
-    paddingVertical: 8,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  radioLabel: {
-    fontSize: 16,
-    color: '#333',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#007bff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-});
 
 export default Login;
