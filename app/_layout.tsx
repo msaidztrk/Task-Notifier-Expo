@@ -37,7 +37,7 @@ export default function RootLayout() {
 
       // Navigate based on settings data
       if (userSettingsData) {
-        router.replace("/screens");
+        router.replace("/screens/HomeScreen");
       } else {
         router.replace("/screens/LoginScreen");
       }
