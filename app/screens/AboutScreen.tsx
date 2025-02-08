@@ -6,10 +6,11 @@ import DaySelector from '../components/DaySelector';
 import TimeSlot from '../components/TimeSlots';
 import AddButton from '../components/AddButton';
 import useSettingsStore from '../store/useSettingsStore';
+import TimeLoopOfAlarm from '../components/TimeLoopOfAlarm';
 
 const AboutScreen = () => {
 
-  const { settingsData } = useSettingsStore(); 
+  const { settingsData } = useSettingsStore();
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [timeSelections, setTimeSelections] = useState<
     Array<{ startTime: string; endTime: string; radioValue: string }>
@@ -17,7 +18,9 @@ const AboutScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [time, setTime] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-
+  const [timeLoopHourMinute, setTimeLoopHourMinute] = useState<
+    Array<{ hour: string; minute: string; }>
+  >([]);
   const toggleDaySelection = (day: string) => {
     if (selectedDays.includes(day)) {
       setSelectedDays(selectedDays.filter((d) => d !== day));
@@ -28,6 +31,12 @@ const AboutScreen = () => {
 
   const addTimeSelection = () => {
     setTimeSelections([...timeSelections, { startTime: '', endTime: '', radioValue: '' }]);
+  };
+
+  const removeTimeSlot = (index: number) => {
+    const updatedSelections = [...timeSelections];
+    updatedSelections.splice(index, 1);
+    setTimeSelections(updatedSelections);
   };
 
   const handleTimeChange = (index: number, field: 'startTime' | 'endTime', value: string) => {
@@ -57,14 +66,38 @@ const AboutScreen = () => {
   const onChange = (event: any, selectedTime: any) => {
     setShowPicker(false);
     if (selectedTime) {
+      console.log('selectedTime : ', selectedTime);
       setTime(selectedTime);
     }
+  };
+
+  const logData = () => {
+    console.log(
+      JSON.stringify(
+        {
+          selectedDays,
+          timeSelections,
+          time: time.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric' }),
+          timeLoopHourMinute
+        },
+        null,
+        2
+      )
+    );
   };
 
   return (
     <ScrollView className="flex-1 bg-gray-50 p-5">
       {/* Header */}
+
       <Text className="text-2xl font-bold text-gray-900 text-center mb-6">Create New Alarm</Text>
+      {/* Header: "Create New Alarm" başlığı ve sağ üstte "Ekle" butonu */}
+      <View className="flex-row justify-between items-center mb-6">
+
+        <TouchableOpacity onPress={logData} className="bg-green-500 rounded-full p-3">
+          <Text className="text-white font-bold">Kaydet</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Days of the Week Selection */}
       <View className="bg-white rounded-lg shadow-sm p-4 mb-6">
@@ -79,7 +112,7 @@ const AboutScreen = () => {
 
       {/* Time Picker */}
       <View className="bg-white rounded-lg shadow-sm p-4 mb-6">
-        <Text className="text-lg font-semibold text-gray-800 mb-3">Set Time</Text>
+        <Text className="text-lg font-semibold text-gray-800 mb-3">Set Start Time</Text>
         <TouchableOpacity
           className="bg-blue-500 rounded-lg py-3 px-4 items-center justify-center"
           onPress={() => setShowPicker(true)}
@@ -98,18 +131,32 @@ const AboutScreen = () => {
         )}
       </View>
 
+      <View className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <TimeLoopOfAlarm setTimeLoopHourMinute={setTimeLoopHourMinute} />
+      </View>
+
       {/* Time Selections */}
       <View className="bg-white rounded-lg shadow-sm p-4 mb-6">
-        <Text className="text-lg font-semibold text-gray-800 mb-3">Add Time Slots</Text>
-        {timeSelections.map((selection, index) => (
-          <TimeSlot
-            key={index}
-            index={index}
-            selection={selection}
-            handleTimeChange={handleTimeChange}
-            handleRadioChange={handleRadioChange}
-          />
-        ))}
+        <Text className="text-lg font-semibold text-gray-800 mb-3">Add Except Time Gaps</Text>
+
+        <View className="space-y-4">
+          {timeSelections.map((selection, index) => (
+            <View
+              key={index}
+              className="bg-white rounded-xl shadow-md p-5 border border-gray-200"
+            >
+              <TimeSlot
+                index={index}
+                selection={selection}
+                handleTimeChange={handleTimeChange}
+                handleRadioChange={handleRadioChange}
+                handleDelete={removeTimeSlot}
+              />
+            </View>
+          ))}
+        </View>
+
+
         <AddButton onPress={addTimeSelection} />
       </View>
 

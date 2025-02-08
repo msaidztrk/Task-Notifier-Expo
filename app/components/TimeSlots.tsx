@@ -10,9 +10,10 @@ interface TimeSlotProps {
   };
   handleTimeChange: (index: number, field: 'startTime' | 'endTime', value: string) => void;
   handleRadioChange: (index: number, value: string) => void;
+  handleDelete: (index: number) => void;
 }
 
-const TimeSlot: React.FC<TimeSlotProps> = ({ index, selection, handleTimeChange, handleRadioChange }) => {
+const TimeSlot: React.FC<TimeSlotProps> = ({ index, selection, handleTimeChange, handleRadioChange, handleDelete }) => {
   const [error, setError] = useState<string | null>(null);
 
   // Function to validate and format time input
@@ -52,13 +53,21 @@ const TimeSlot: React.FC<TimeSlotProps> = ({ index, selection, handleTimeChange,
   };
 
   return (
-    <View className="mb-5">
+    <View className="">
+
+      {/* Delete Slot Button */}
+      <TouchableOpacity
+        onPress={() => handleDelete(index)}
+        className="bg-red-500 rounded-lg py-2 px-4 mt-3 items-center"
+      >
+        <Text className="text-white font-bold">Delete Slot</Text>
+      </TouchableOpacity>
+
       {/* Start Time Input */}
       <Text className="text-sm text-gray-700 mb-1">Start Time:</Text>
       <TextInput
-        className={`border ${
-          error ? 'border-red-500' : 'border-gray-300'
-        } rounded-lg p-2 mb-3 bg-white`}
+        className={`border ${error ? 'border-red-500' : 'border-gray-300'
+          } rounded-lg p-2 mb-3 bg-white`}
         placeholder="HH:MM"
         value={selection.startTime}
         onChangeText={(text) => formatAndValidateTimeInput(text, 'startTime')}
@@ -69,9 +78,8 @@ const TimeSlot: React.FC<TimeSlotProps> = ({ index, selection, handleTimeChange,
       {/* End Time Input */}
       <Text className="text-sm text-gray-700 mb-1">End Time:</Text>
       <TextInput
-        className={`border ${
-          error ? 'border-red-500' : 'border-gray-300'
-        } rounded-lg p-2 mb-3 bg-white`}
+        className={`border ${error ? 'border-red-500' : 'border-gray-300'
+          } rounded-lg p-2 bg-white`}
         placeholder="HH:MM"
         value={selection.endTime}
         onChangeText={(text) => formatAndValidateTimeInput(text, 'endTime')}
@@ -83,37 +91,37 @@ const TimeSlot: React.FC<TimeSlotProps> = ({ index, selection, handleTimeChange,
       {error && <Text className="text-red-500 text-sm mb-3">{error}</Text>}
 
       {/* Radio Buttons */}
-      <View className="flex-row justify-between">
+      {/* <View className="flex-row justify-between">
         <TouchableOpacity
-          className={`flex-1 p-3 rounded-lg mx-1 items-center ${
-            selection.radioValue === 'option1' ? 'bg-blue-500' : 'bg-gray-200'
-          }`}
+          className={`flex-1 p-3 rounded-lg mx-1 items-center ${selection.radioValue === 'option1' ? 'bg-blue-500' : 'bg-gray-200'
+            }`}
           onPress={() => handleRadioChange(index, 'option1')}
         >
           <Text
-            className={`text-sm font-medium ${
-              selection.radioValue === 'option1' ? 'text-white' : 'text-gray-700'
-            }`}
+            className={`text-sm font-medium ${selection.radioValue === 'option1' ? 'text-white' : 'text-gray-700'
+              }`}
           >
-            Option 1
+            İnclude
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          className={`flex-1 p-3 rounded-lg mx-1 items-center ${
-            selection.radioValue === 'option2' ? 'bg-blue-500' : 'bg-gray-200'
-          }`}
+          className={`flex-1 p-3 rounded-lg mx-1 items-center ${selection.radioValue === 'option2' ? 'bg-blue-500' : 'bg-gray-200'
+            }`}
           onPress={() => handleRadioChange(index, 'option2')}
         >
           <Text
-            className={`text-sm font-medium ${
-              selection.radioValue === 'option2' ? 'text-white' : 'text-gray-700'
-            }`}
+            className={`text-sm font-medium ${selection.radioValue === 'option2' ? 'text-white' : 'text-gray-700'
+              }`}
           >
             Option 2
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
+
+
+
+
     </View>
   );
 };
